@@ -1,11 +1,9 @@
 package com.example.googlesigninwith_firebase_task;
 
 
-import com.google.firebase.firestore.Exclude;
 
-import java.io.Serializable;
 
-public class ModelClass implements Serializable {
+public class ModelClass  {
 
     public ModelClass(String title, String desc) {
 
@@ -13,16 +11,31 @@ public class ModelClass implements Serializable {
         this.desc = desc;
     }
 
-    public ModelClass( String title, String desc, String img,String id) {
+    public ModelClass(String id, String title, String desc, String img,String uid) {
         this.id = id;
         this.title = title;
         this.desc = desc;
         this.img = img;
+        this.uid=uid;
     }
 
     public ModelClass(String img) {
         this.img=img;
     }
+
+    public ModelClass(String id1, String titlestr, String descstr, String uid) {
+        this.id=id1;
+        this.title=titlestr;
+        this.desc=descstr;
+        this.uid=uid;
+    }
+
+    public ModelClass(String titlestr, String descstr, String uid) {
+        this.title=titlestr;
+        this.desc=descstr;
+        this.uid=uid;
+    }
+
 
     public String getTitle() {
         return title;
@@ -46,29 +59,28 @@ public class ModelClass implements Serializable {
     public void setId(String id) {
         this.id = id;
     }
-    @Exclude
+
     public String id;
     public String title;
     public String desc;
    public String img;
-
+ public  String uid;
     public  ModelClass() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-//    public  ModelClass(String id,String title, String desc) {
-//        this.id=id;
-//        this.title = title;
-//        this.desc = desc;
-//
-//    }
 
 
-    public ModelClass(String title, String desc, String img) {
-        this.title = title;
-        this.desc = desc;
-        this.img = img;
+
+    public String getUid() {
+        return uid;
     }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+
 
     public String getImg() {
         return img;

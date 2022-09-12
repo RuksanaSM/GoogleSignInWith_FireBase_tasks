@@ -36,16 +36,28 @@ public class AdapterClass extends RecyclerView.Adapter<AdapterClass.MyHolder>
 {
 
     // creating variables for our ArrayList and context
-    private ArrayList<ModelClass> modelClassArrayList;
+//    private ArrayList<ModelClass> modelClassArrayList;
     private Context context;
+    private List<ModelClass> modelClassArrayList;
 String titlestr,descstr;
     private FirebaseFirestore firebaseFirestore;
     AddingData_Activity addingData_activity;
 
-    public AdapterClass(ArrayList<ModelClass> modelClassArrayList, Context context) {
-        this.modelClassArrayList = modelClassArrayList;
+    public AdapterClass( Context context) {
         this.context = context;
+        modelClassArrayList=new ArrayList<>();
+
     }
+public void add(ModelClass modelClass)
+{
+    modelClassArrayList.add(modelClass);
+    notifyDataSetChanged();
+}
+public void clear()
+{
+    modelClassArrayList.clear();
+    notifyDataSetChanged();
+}
 
     @NonNull
     @Override
@@ -62,6 +74,18 @@ String titlestr,descstr;
         holder.desc.setText(modelClass.getDesc());
       Glide.with(context).load(modelClassArrayList.get(position).getImg()).into(holder.imageView);
 
+      holder.itemView.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View view) {
+              Intent i=new Intent(context,UpdateActivity.class);
+
+         i.putExtra("id",modelClass.getId());
+         i.putExtra("title",modelClass.getTitle());
+         i.putExtra("desc",modelClass.getDesc());
+         i.putExtra("imgg",modelClass.getImg());
+         context.startActivity(i);
+          }
+      });
 
 //        Glide.with(context)
 //                .load(photoModelList.get(i).getImage())
@@ -105,10 +129,10 @@ String titlestr,descstr;
 //         builder.setView(customLayout);
 
 
-             Intent i = new Intent(context,UpdateActivity.class);
-             // below line is for putting our course object to our next activity.
-            i.putExtra("fb", modelClass);
-             context.startActivity(i);
+//             Intent i = new Intent(context,UpdateActivity.class);
+//             // below line is for putting our course object to our next activity.
+//            i.putExtra("fb", modelClass);
+//             context.startActivity(i);
 
 //         Intent i=new Intent(context,UpdateActivity.class);
 //         i.putExtra("id",modelClass.id);
@@ -127,5 +151,6 @@ String titlestr,descstr;
         }
 
     }
+
 
 }

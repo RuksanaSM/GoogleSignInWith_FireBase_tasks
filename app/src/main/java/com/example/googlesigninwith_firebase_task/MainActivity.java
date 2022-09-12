@@ -148,6 +148,7 @@ public class MainActivity extends AppCompatActivity {
         {
             Toast.makeText(this, "Please Login", Toast.LENGTH_SHORT).show();
         }
+
     }
 
     private void firebaseGoogleToken(String idToken) {

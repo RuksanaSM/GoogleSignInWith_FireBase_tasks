@@ -28,7 +28,7 @@
             android:textColorHint="@android:color/white"
             android:hint="Title"
             android:layout_margin="5dp"
-            android:id="@+id/title"
+            android:id="@+id/titleud"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
         <EditText
@@ -37,7 +37,7 @@
 
             android:layout_margin="5dp"
             android:hint="Description"
-            android:id="@+id/desc"
+            android:id="@+id/descud"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 <LinearLayout
@@ -53,7 +53,7 @@
             android:textStyle="bold"
             android:textColor="@android:color/white"
             android:id="@+id/updatesbutton"
-            android:text="Update Notes"
+            android:text="Update"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
@@ -63,7 +63,7 @@
             android:textStyle="bold"
             android:textColor="@android:color/white"
             android:id="@+id/deletedbutton"
-            android:text="Delete Notes"
+            android:text="Delete "
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
@@ -75,7 +75,7 @@
         android:id="@+id/cancelbutton"
         android:text="Cancel"
         android:layout_width="0dp"
-        android:layout_height="45dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1"/>
 </LinearLayout>
     </LinearLayout>

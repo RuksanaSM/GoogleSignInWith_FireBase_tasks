@@ -33,6 +33,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
@@ -70,7 +71,7 @@ ImageView imgages;
     // Uri indicates, where the image will be picked from
     private Uri filePath;
     ProgressDialog progressDialog;
-
+FirebaseAuth firebaseAuth;
     // request code
     private final int PICK_IMAGE_REQUEST = 22;
 
@@ -102,94 +103,94 @@ progressDialog.dismiss();
 
 
 
-imgages=findViewById(R.id.recyclrimg);
+     imgages=findViewById(R.id.recyclrimg);
         recyclerView = findViewById(R.id.recyclerid);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         modelClassArrayList = new ArrayList<>();
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapterClass = new AdapterClass(modelClassArrayList, this);
+        adapterClass = new AdapterClass(this);
         recyclerView.setAdapter(adapterClass);
-        loadPhotos();
+        //loadPhotos();
 
         //Reading from firebase to recyclerview
 
-//        firebaseFirestore.collection("FbNotes").get()
-//                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-//
-//                        if (!queryDocumentSnapshots.isEmpty()) {
-////                            loadingPB.setVisibility(View.GONE);
-//                            List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
-//                            for (DocumentSnapshot d : list) {
-//
-//                                ModelClass c = d.toObject(ModelClass.class);
-//                                c.setId(d.getId());
-//                                modelClassArrayList.add(c);
-//                            }
-//
-//                            adapterClass.notifyDataSetChanged();
-//                        } else {
-//
-//                            Toast.makeText(AddingData_Activity.this, "No data found in Database", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                }).addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//
-//                        Toast.makeText(AddingData_Activity.this, "Fail to get the data.", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//
-    }
+        firebaseFirestore.collection("Notes").get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 
-    private void loadPhotos() {
-        try {
-            progressDialog.show();
-            progressDialog.setMessage("Loading...");
-            firebaseFirestore.collection("ODSIMAGES").get().addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    progressDialog.dismiss();
-                    Toast.makeText(AddingData_Activity.this, ""+e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                }
-            }).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    progressDialog.dismiss();
-                    if(!task.isSuccessful())
-                    {
-                        Toast.makeText(AddingData_Activity.this, ""+task.getException(), Toast.LENGTH_SHORT).show();
-                    }
-                    else
-                    {
+                        if (!queryDocumentSnapshots.isEmpty()) {
+//                            loadingPB.setVisibility(View.GONE);
+                            List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
+                            for (DocumentSnapshot d : list) {
 
-                        for(QueryDocumentSnapshot qb:task.getResult())
-                        {
-                            String tname=qb.getString("title1");
-                            String  dname=qb.getString("desc1");
-                            String url=qb.getString("photoUrl");
-    //                        String id=qb.getString("id");
+                                ModelClass c = d.toObject(ModelClass.class);
+                                c.setId(d.getId());
+                                modelClassArrayList.add(c);
+                            }
 
-                            ModelClass modelClass=new ModelClass(tname,dname,url);
-
-                            modelClassArrayList.add(modelClass);
                             adapterClass.notifyDataSetChanged();
+                        } else {
+
+                            Toast.makeText(AddingData_Activity.this, "No data found in Database", Toast.LENGTH_SHORT).show();
                         }
-
-
                     }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
 
-
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+                        Toast.makeText(AddingData_Activity.this, "Fail to get the data.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+//
     }
+
+//    private void loadPhotos() {
+//        try {
+//            progressDialog.show();
+//            progressDialog.setMessage("Loading...");
+//            firebaseFirestore.collection("Notes").get().addOnFailureListener(new OnFailureListener() {
+//                @Override
+//                public void onFailure(@NonNull Exception e) {
+//                    progressDialog.dismiss();
+//                    Toast.makeText(AddingData_Activity.this, ""+e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+//                }
+//            }).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                @Override
+//                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                    progressDialog.dismiss();
+//                    if(!task.isSuccessful())
+//                    {
+//                        Toast.makeText(AddingData_Activity.this, ""+task.getException(), Toast.LENGTH_SHORT).show();
+//                    }
+//                    else
+//                    {
+//
+//                        for(QueryDocumentSnapshot qb:task.getResult())
+//                        {
+//                            String tname=qb.getString("title1");
+//                            String  dname=qb.getString("desc1");
+//                            String url=qb.getString("photoUrl");
+//                            String id=qb.getString("id");
+//
+//                            ModelClass modelClass=new ModelClass(id,tname,dname,url);
+//
+//                            modelClassArrayList.add(modelClass);
+//                            adapterClass.notifyDataSetChanged();
+//                        }
+//
+//
+//                    }
+//
+//
+//                }
+//            });
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+    //}
 
 //////
     private void uploadImage() {
@@ -380,6 +381,7 @@ imgages=findViewById(R.id.recyclrimg);
                    // addDataToFirestore(titlestr, descstr);
 
                    uploadtoStorage();
+
                 }
             }
         });
@@ -465,32 +467,33 @@ imgages=findViewById(R.id.recyclrimg);
     private void cloudFireStore(String myurl) {
 
         try {
+ FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
+ ProgressDialog progressDialog=new ProgressDialog(this);
+            progressDialog.setMessage("Saving Data almost Done");
             progressDialog.show();
-            progressDialog.setMessage("Saving Image almost Done");
 
-            Map<String,Object> map=new HashMap<>();
-            map.put("photoUrl",myurl);
-            map.put("title1",filenameStr);
-            map.put("desc1",filenameStr1);
-//map.put("id",null);
-//
+            String noteId=UUID.randomUUID().toString();
+            ModelClass modelClass=new ModelClass(noteId,titlestr,descstr,myurl,firebaseAuth.getUid());
+            FirebaseFirestore firebaseFirestore=FirebaseFirestore.getInstance();
 
-            firebaseFirestore.collection("ODSIMAGES").add(map).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                @Override
-                public void onSuccess(DocumentReference documentReference) {
-                    progressDialog.dismiss();
+            firebaseFirestore.collection("Notes").document(noteId).set(modelClass)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
 
-                    Toast.makeText(AddingData_Activity.this, "Upload Success", Toast.LENGTH_SHORT).show();
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    progressDialog.dismiss();
-                    Toast.makeText(AddingData_Activity.this, "Failed to upload"+e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddingData_Activity.this, "successfully stored the data", Toast.LENGTH_SHORT).show();
+                      progressDialog.cancel();
+//                            finish();
 
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                            Toast.makeText(AddingData_Activity.this, "fail to store", Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
-                }
-            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -542,12 +545,8 @@ imgages=findViewById(R.id.recyclrimg);
 //                Toast.makeText(AddingData_Activity.this, "Fail to add Data \n" + e, Toast.LENGTH_SHORT).show();
 //            }
 //        });
-//
-//
-//
 //    }
-
-//            private void sendDialogDataToActivity(String titleadd, String descadd)
+//    private void sendDialogDataToActivity(String titleadd, String descadd)
 //            {
 //                Toast.makeText(this, titleadd, Toast.LENGTH_SHORT).show();
 //                Toast.makeText(this, descadd, Toast.LENGTH_SHORT).show();
@@ -555,4 +554,33 @@ imgages=findViewById(R.id.recyclrimg);
 //        }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getData();
+    }
+
+    private void getData() {
+        FirebaseFirestore.getInstance().collection("Notes")
+                .whereEqualTo("uid",FirebaseAuth.getInstance().getUid())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        List<DocumentSnapshot> dlist=queryDocumentSnapshots.getDocuments();
+                        adapterClass.clear();
+                        for (int i=0;i<dlist.size();i++)
+                        {
+                            DocumentSnapshot documentSnapshot=dlist.get(i);
+                            ModelClass modelClass=documentSnapshot.toObject(ModelClass.class);
+                            adapterClass.add(modelClass);
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(AddingData_Activity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
 }
